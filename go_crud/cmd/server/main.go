@@ -31,7 +31,7 @@ func main(){
 		Handler: router,
 	}
 
-	slog.Info("Server Started: ", slog.String("address", cfg.HTTPServer.Addr) )
+	slog.Info("Server Started: ", slog.String("address", cfg.Addr) )
 
 	done:= make(chan os.Signal, 1)
 
@@ -39,7 +39,7 @@ func main(){
 
 	go func(){
 		err:= server.ListenAndServe()
-		if err!= nil{
+		if err!= nil && err != http.ErrServerClosed{
 			log.Fatal("Failed to start the server ")
 		}
 	}()
