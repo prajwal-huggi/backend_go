@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/prajwal-huggi/backend_go/internal/config"
+	"github.com/prajwal-huggi/backend_go/internal/http/handlers/student"
 )
 
 func main(){
@@ -22,9 +23,7 @@ func main(){
 	router:= http.NewServeMux()
 
 	//The below is our first endpoint
-	router.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request){
-		w.Write([]byte("Welcome to CRUd operations in golang"))
-	})
+	router.HandleFunc("POST /api/students", student.New())
 
 	// 4) setup server
 	server:= http.Server{
