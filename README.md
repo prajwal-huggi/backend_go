@@ -10,3 +10,7 @@ go run cmd/server/main.go -config config/local.yaml
 https://github.com/go-playground/validator
 go get github.com/go-playground/validator/v10
 The above command is used to validate the request which is sent by the user.
+
+installing the go sqlite driver
+https://github.com/mattn/go-sqlite3
+go get github.com/mattn/go-sqlite3

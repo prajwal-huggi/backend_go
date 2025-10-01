@@ -12,6 +12,7 @@ import (
 
 	"github.com/prajwal-huggi/backend_go/internal/config"
 	"github.com/prajwal-huggi/backend_go/internal/http/handlers/student"
+	"github.com/prajwal-huggi/backend_go/internal/storage/sqlite"
 )
 
 func main(){
@@ -19,11 +20,19 @@ func main(){
 	cfg:= config.MustLoad()
 
 	// 2) database setup
+	storage, err:= sqlite.New(cfg)
+	if err!= nil{
+		log.Fatalf("Unable to create the database: %s", err.Error())
+	}
+
+	slog.Info("Storage Initialized", slog.String("env", cfg.Env))
+
+
 	// 3) setup router
 	router:= http.NewServeMux()
 
 	//The below is our first endpoint
-	router.HandleFunc("POST /api/students", student.New())
+	router.HandleFunc("POST /api/students", student.New(storage))
 
 	// 4) setup server
 	server:= http.Server{
@@ -52,7 +61,7 @@ func main(){
 	defer cancel()
 
 
-	err:= server.Shutdown(ctx)
+	err= server.Shutdown(ctx)
 	if err!= nil{
 		slog.Error("Failed to shutdown server", slog.String("error", err.Error()))
 	}
