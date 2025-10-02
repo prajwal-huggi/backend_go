@@ -1,5 +1,5 @@
 brew install go
-
+To initialize the go: go mod init github.com/prajwal-huggi/backend_go
 from the link(go lang clean)-> https://github.com/ilyakaznacheev/cleanenv
 
 go get -u github.com/ilyakaznacheev/cleanenv
