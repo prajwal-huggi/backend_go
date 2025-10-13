@@ -25,6 +25,13 @@ func sum(result chan int, num1 int, num2 int){
 	result<- res
 }
 
+// receiving the channel: goroutines synchronizer
+func task(done chan bool){
+	defer func (){done<- true}()
+
+	fmt.Println("processing...")
+}
+
 func main(){
 	// The below is the demonstration for the transferring the data from one goroutines to another
 	numChan:= make(chan int)
@@ -36,11 +43,18 @@ func main(){
 	// }
 //------------------------------------------------------------------------
 
-	result:= make(chan int)
-	go sum(result, 4, 5)
-	res:= <- result // blocking (sending)
-	fmt.Println(res)
+	// result:= make(chan int)
+	// go sum(result, 4, 5)
+	// res:= <- result // blocking (sending)
+	// fmt.Println(res)
 
+
+//------------------------------------------------------------------------
+
+	done:= make(chan bool)
+
+	go task(done)
+	<- done //block until the value is recieved from the line 30
 
 //------------------------------------------------------------------------
 
