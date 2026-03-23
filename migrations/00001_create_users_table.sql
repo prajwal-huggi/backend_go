@@ -1,5 +1,11 @@
 -- +goose Up
-CREATE TYPE user_role AS ENUM('user', 'admin', 'manager');
+-- +goose StatementBegin
+DO $$ BEGIN
+    CREATE TYPE user_role AS ENUM ('user', 'admin', 'manager');
+EXCEPTION
+    WHEN duplicate_object THEN NULL;
+END $$;
+-- +goose StatementEnd
 
 CREATE TABLE users(
     id SERIAL PRIMARY KEY,
@@ -11,3 +17,4 @@ CREATE TABLE users(
 
 -- +goose Down
 DROP TABLE users;
+DROP TYPE IF EXISTS user_role;

@@ -13,4 +13,5 @@ type UserModel struct{
 	Name string `json:"name"`
 	Email string `json:"email"`
 	Role RoleType `json:"role"`
+	Password string `json:"password,omitempty"`
 }

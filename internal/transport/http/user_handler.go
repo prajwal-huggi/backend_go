@@ -102,3 +102,43 @@ func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusNoContent)
 }
+
+func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
+
+	var req struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+
+	json.NewDecoder(r.Body).Decode(&req)
+
+	access, refresh, err := h.service.Login(r.Context(), req.Email, req.Password)
+	if err != nil {
+		http.Error(w, err.Error(), 401)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"access_token":  access,
+		"refresh_token": refresh,
+	})
+}
+
+func (h *UserHandler) Refresh(w http.ResponseWriter, r *http.Request) {
+
+	var req struct {
+		RefreshToken string `json:"refresh_token"`
+	}
+
+	json.NewDecoder(r.Body).Decode(&req)
+
+	access, err := h.service.RefreshToken(r.Context(), req.RefreshToken)
+	if err != nil {
+		http.Error(w, "invalid token", 401)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]string{
+		"access_token": access,
+	})
+}

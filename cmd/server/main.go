@@ -4,8 +4,10 @@ import (
 	// "context"
 	"log"
 	"net/http"
+
 	// "time"
 
+	"github.com/prajwal-huggi/backend_go/internal/auth"
 	"github.com/prajwal-huggi/backend_go/internal/config"
 	"github.com/prajwal-huggi/backend_go/internal/repository"
 	"github.com/prajwal-huggi/backend_go/internal/service"
@@ -25,11 +27,12 @@ func main() {
 	// means if the operation> 5 sec then cancel it(in this case db query)
 	// ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	// defer cancel()
-	userService := service.NewUserService(userRepo)
+	jwtService:= auth.NewJWTService(cfg.JWTSecret)
+	userService := service.NewUserService(userRepo, jwtService)
 
 	userHandler := httptransport.NewUserHandler(userService)
 
-	router := httptransport.NewRouter(userHandler)
+	router := httptransport.NewRouter(userHandler, jwtService)
 	
 	log.Println("Server is running on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", router))
