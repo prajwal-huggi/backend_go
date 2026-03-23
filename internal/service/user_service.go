@@ -66,12 +66,12 @@ func (s *UserService) Login(ctx context.Context, email, password string) (string
 	}
 	// fmt.Println("Password matched for user:", user.Email)
 
-	accessToken, err := s.jwt.GenerateAccessToken(user.ID)
+	accessToken, err := s.jwt.GenerateAccessToken(user.ID, user.Role)
 	if err != nil {
 		return "", "", err
 	}
 
-	refreshToken, err := s.jwt.GenerateRefreshToken(user.ID)
+	refreshToken, err := s.jwt.GenerateRefreshToken(user.ID, user.Role)
 	if err != nil {
 		return "", "", err
 	}
@@ -95,8 +95,9 @@ func (s *UserService) RefreshToken(ctx context.Context, refreshToken string) (st
 
 	claims := token.Claims.(jwt.MapClaims)
 	userID := int(claims["user_id"].(float64))
+	userRole := domain.RoleType(claims["role"].(string))
 
-	newAccessToken, err := s.jwt.GenerateAccessToken(userID)
+	newAccessToken, err := s.jwt.GenerateAccessToken(userID, userRole)
 	if err != nil {
 		return "", err
 	}

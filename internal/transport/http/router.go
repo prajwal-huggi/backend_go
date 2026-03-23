@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/prajwal-huggi/backend_go/internal/auth"
+	"github.com/prajwal-huggi/backend_go/internal/domain"
 	"github.com/prajwal-huggi/backend_go/internal/middleware"
 )
 
@@ -24,11 +25,11 @@ func NewRouter(userHandler *UserHandler, jwtService *auth.JWTService) http.Handl
 	// OR
 	r.Group(func(r chi.Router) {
 		r.Use(middleware.JWTAuth(jwtService))
-		
-		r.Get("/users", userHandler.GetUsers)
+
+		r.With(middleware.RequireRole(domain.Manager)).Get("/users", userHandler.GetUsers)
 		r.Get("/users/{id}", userHandler.GetUser)
 		r.Put("/users/{id}", userHandler.UpdateUser)
-		r.Delete("/users/{id}", userHandler.DeleteUser)
+		r.With(middleware.RequireRole(domain.Admin)).Delete("/users/{id}", userHandler.DeleteUser)
 	})
 
 	return r

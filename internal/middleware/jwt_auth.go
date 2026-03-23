@@ -1,9 +1,12 @@
 package middleware
 
 import (
+	"context"
+	"fmt"
 	"net/http"
 	"strings"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/prajwal-huggi/backend_go/internal/auth"
 )
 
@@ -27,6 +30,13 @@ func JWTAuth(jwtService *auth.JWTService) func(http.Handler) http.Handler {
 				http.Error(w, "invalid token", 401)
 				return
 			}
+
+			claims:= token.Claims.(jwt.MapClaims)
+			fmt.Println("JWT Claims:", claims)
+			ctx:= context.WithValue(r.Context(), "role", claims["role"])
+			ctx= context.WithValue(ctx, "user_id", claims["user_id"])
+
+			r = r.WithContext(ctx)
 
 			next.ServeHTTP(w, r)
 		})

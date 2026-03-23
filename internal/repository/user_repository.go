@@ -87,11 +87,11 @@ func (r *UserRepository) DeleteUser(ctx context.Context, id int) error {
 
 func (r *UserRepository) GetUserByEmail(ctx context.Context, email string) (domain.UserModel, error) {
 
-	query := `SELECT id, name, email, password FROM users WHERE email=$1`
+	query := `SELECT id, name, role, email, password FROM users WHERE email=$1`
 
 	var user domain.UserModel
 	err := r.db.QueryRow(ctx, query, email).
-		Scan(&user.ID, &user.Name, &user.Email, &user.Password)
+		Scan(&user.ID, &user.Name, &user.Role, &user.Email, &user.Password)
 
 	return user, err
 }
