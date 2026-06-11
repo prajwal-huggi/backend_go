@@ -12,14 +12,14 @@ func RequireRole(allowedRoles ...domain.RoleType) func(http.Handler) http.Handle
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-			roleStr, ok:= r.Context().Value("role").(string)
+			roleStr, ok := r.Context().Value("role").(string)
 			if !ok {
 				fmt.Printf(`"%v": Role not found in context`, roleStr)
-				http.Error(w, "unauthorized", 401)// concept unauthenticated
+				http.Error(w, "unauthorized", 401) // concept unauthenticated
 				return
 			}
 
-			role:= domain.RoleType(roleStr)
+			role := domain.RoleType(roleStr)
 
 			for _, allowed := range allowedRoles {
 				if role == allowed {
@@ -28,7 +28,7 @@ func RequireRole(allowedRoles ...domain.RoleType) func(http.Handler) http.Handle
 				}
 			}
 
-			http.Error(w, "forbidden", 403)// concept unauthorized
+			http.Error(w, "forbidden", 403) // concept unauthorized
 		})
 	}
 }
