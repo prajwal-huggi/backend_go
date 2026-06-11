@@ -31,10 +31,10 @@ func JWTAuth(jwtService *auth.JWTService) func(http.Handler) http.Handler {
 				return
 			}
 
-			claims:= token.Claims.(jwt.MapClaims)
+			claims := token.Claims.(jwt.MapClaims)
 			fmt.Println("JWT Claims:", claims)
-			ctx:= context.WithValue(r.Context(), "role", claims["role"])
-			ctx= context.WithValue(ctx, "user_id", claims["user_id"])
+			ctx := context.WithValue(r.Context(), "role", claims["role"])
+			ctx = context.WithValue(ctx, "user_id", claims["user_id"])
 
 			r = r.WithContext(ctx)
 

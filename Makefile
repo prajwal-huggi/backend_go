@@ -1,6 +1,18 @@
-include .env
+-include .env
 
 DB_URL=postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=$(DB_SSLMODE)
+
+build:
+	go build ./...
+
+test:
+	go test ./... -v
+
+vet:
+	go vet ./...
+
+fmt:
+	test -z "$$(gofmt -l .)"
 
 migrate-up:
 	goose -dir migrations postgres "$(DB_URL)" up
@@ -14,5 +26,12 @@ migrate-reset:
 migrate-status:
 	goose -dir migrations postgres "$(DB_URL)" status
 
+ci:
+	make fmt
+	make build
+	make vet
+	make migrate-up
+	make test
+	docker build -t backend-go .
 # COMMANDS TO RUN 
 # make migrate-up, migrate-down, migrate-reset

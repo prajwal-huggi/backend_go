@@ -21,7 +21,7 @@ func (j *JWTService) GenerateAccessToken(userID int, userRole domain.RoleType) (
 	claims := jwt.MapClaims{
 		"user_id": userID,
 		"exp":     time.Now().Add(15 * time.Minute).Unix(),
-		"role": userRole,
+		"role":    userRole,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -34,7 +34,7 @@ func (j *JWTService) GenerateRefreshToken(userID int, userRole domain.RoleType) 
 	claims := jwt.MapClaims{
 		"user_id": userID,
 		"exp":     time.Now().Add(7 * 24 * time.Hour).Unix(),
-		"role": userRole,
+		"role":    userRole,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

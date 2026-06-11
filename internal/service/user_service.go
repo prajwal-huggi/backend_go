@@ -11,19 +11,19 @@ import (
 	// "github.com/prajwal-huggi/backend_go/util"
 )
 
-type UserService struct{
+type UserService struct {
 	repo domain.UserRepository
-	jwt *auth.JWTService
+	jwt  *auth.JWTService
 }
 
-func NewUserService(repo domain.UserRepository, jwt *auth.JWTService) *UserService{
+func NewUserService(repo domain.UserRepository, jwt *auth.JWTService) *UserService {
 	return &UserService{
 		repo: repo,
-		jwt: jwt,
+		jwt:  jwt,
 	}
 }
 
-func (s *UserService)CreateUser(ctx context.Context, user domain.UserModel) error{
+func (s *UserService) CreateUser(ctx context.Context, user domain.UserModel) error {
 	if user.Name == "" {
 		return fmt.Errorf("name cannot be empty")
 	}
@@ -32,23 +32,23 @@ func (s *UserService)CreateUser(ctx context.Context, user domain.UserModel) erro
 		return fmt.Errorf("error hashing password: %w", err)
 	}
 	user.Password = hashedPassword
-	
+
 	return s.repo.CreateUser(ctx, user)
 }
 
-func (s *UserService)GetUser(ctx context.Context, id int) (domain.UserModel, error){
+func (s *UserService) GetUser(ctx context.Context, id int) (domain.UserModel, error) {
 	return s.repo.GetUser(ctx, id)
 }
 
-func (s *UserService)GetUsers(ctx context.Context) ([]domain.UserModel, error){
+func (s *UserService) GetUsers(ctx context.Context) ([]domain.UserModel, error) {
 	return s.repo.GetUsers(ctx)
 }
 
-func (s *UserService)UpdateUser(ctx context.Context, user domain.UserModel) error{
+func (s *UserService) UpdateUser(ctx context.Context, user domain.UserModel) error {
 	return s.repo.UpdateUser(ctx, user)
 }
 
-func (s *UserService)DeleteUser(ctx context.Context, id int) error{
+func (s *UserService) DeleteUser(ctx context.Context, id int) error {
 	return s.repo.DeleteUser(ctx, id)
 }
 
