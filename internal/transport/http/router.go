@@ -7,6 +7,8 @@ import (
 	"github.com/prajwal-huggi/backend_go/internal/auth"
 	"github.com/prajwal-huggi/backend_go/internal/domain"
 	"github.com/prajwal-huggi/backend_go/internal/middleware"
+
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 func NewRouter(userHandler *UserHandler, jwtService *auth.JWTService) http.Handler {
@@ -32,5 +34,10 @@ func NewRouter(userHandler *UserHandler, jwtService *auth.JWTService) http.Handl
 		r.With(middleware.RequireRole(domain.Admin)).Delete("/users/{id}", userHandler.DeleteUser)
 	})
 
+	r.Get("/docs", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/docs/index.html", http.StatusMovedPermanently)
+	})
+
+	r.Get("/docs/*", httpSwagger.WrapHandler)
 	return r
 }
