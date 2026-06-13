@@ -12,7 +12,7 @@ vet:
 	go vet ./...
 
 fmt:
-	test -z "$$(gofmt -l .)"
+	gofmt -w .
 
 migrate-up:
 	goose -dir migrations postgres "$(DB_URL)" up

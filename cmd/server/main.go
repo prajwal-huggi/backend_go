@@ -11,10 +11,10 @@ import (
 	"github.com/prajwal-huggi/backend_go/internal/config"
 	"github.com/prajwal-huggi/backend_go/internal/repository"
 	"github.com/prajwal-huggi/backend_go/internal/service"
-	
+
 	db "github.com/prajwal-huggi/backend_go/internal/db"
 	httptransport "github.com/prajwal-huggi/backend_go/internal/transport/http"
-	
+
 	_ "github.com/prajwal-huggi/backend_go/docs"
 )
 

@@ -1,4 +1,5 @@
 package dto
+
 // internal/dto/auth.go
 
 type LoginRequest struct {
