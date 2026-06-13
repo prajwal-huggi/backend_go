@@ -575,4 +575,126 @@ domain
 repository
       ↓
 database
+
+# 19. API Documentation (Swagger / OpenAPI)
+
+This project uses **Swagger (OpenAPI)** for interactive API documentation.
+
+Swagger documentation is generated directly from handler annotations and stays synchronized with the codebase.
+
+Benefits:
+
+* Interactive API testing
+* Request/response schema documentation
+* JWT authentication support
+* Improved developer experience
+* Self-documenting APIs
+
+---
+
+## Swagger Setup
+
+Install Swag CLI:
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@latest
+```
+
+Generate Swagger documentation:
+
+```bash
+swag init -g cmd/server/main.go
+```
+
+Generated files:
+
+```text
+docs/
+├── docs.go
+├── swagger.json
+└── swagger.yaml
+```
+
+---
+
+## Access Swagger UI
+
+Start the application:
+
+```bash
+go run cmd/server/main.go
+```
+
+or
+
+```bash
+docker compose up --build
+```
+
+Open:
+
+```text
+http://localhost:8080/docs
+```
+
+---
+
+## Authentication
+
+Protected endpoints use JWT authentication.
+
+Steps:
+
+1. Execute the Login API.
+2. Copy the returned access token.
+3. Click the **Authorize** button in Swagger UI.
+4. Enter:
+
+```text
+Bearer <access_token>
+```
+
+5. Execute protected endpoints.
+
+---
+
+## Available API Endpoints
+
+### Authentication
+
+```text
+POST /login
+POST /refresh
+```
+
+### User Management
+
+```text
+POST   /users
+GET    /users
+GET    /users/{id}
+PUT    /users/{id}
+DELETE /users/{id}
+```
+
+---
+
+## Documentation Workflow
+
+Whenever a handler annotation is added or modified:
+
+```bash
+swag init -g cmd/server/main.go
+```
+
+Commit the updated Swagger files:
+
+```text
+docs/swagger.json
+docs/swagger.yaml
+docs/docs.go
+```
+
+This ensures the documentation remains synchronized with the implementation.
+
 ```
